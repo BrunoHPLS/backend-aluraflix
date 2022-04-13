@@ -27,5 +27,8 @@ public class VideoController {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
-
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VideoDTO> save(@RequestBody VideoDTO dto){
+        return new ResponseEntity<>(service.create(dto),HttpStatus.CREATED);
+    }
 }

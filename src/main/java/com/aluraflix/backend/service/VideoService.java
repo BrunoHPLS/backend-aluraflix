@@ -3,6 +3,7 @@ package com.aluraflix.backend.service;
 import com.aluraflix.backend.entity.DTO.VideoDTO;
 import com.aluraflix.backend.entity.model.Video;
 import com.aluraflix.backend.exceptions.EntityNotFoundException;
+import com.aluraflix.backend.exceptions.EntityNullException;
 import com.aluraflix.backend.mapper.VideoMapper;
 import com.aluraflix.backend.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
 
 @Service
@@ -36,4 +38,20 @@ public class VideoService {
             throw new EntityNotFoundException(new Video(),id);
         }
     }
+
+    public VideoDTO create(VideoDTO dto){
+        try {
+            for (Field f : dto.getClass().getDeclaredFields()) {
+                f.setAccessible(true);
+                if (f.get(dto) == null && !f.getName().equals("id")) {
+                    throw new EntityNullException(dto);
+                }
+            }
+        }catch (IllegalAccessException ex){}
+        return mapper.toDTO(
+                repository.save(
+                        mapper.toEntity(dto)));
+    }
+
+
 }
