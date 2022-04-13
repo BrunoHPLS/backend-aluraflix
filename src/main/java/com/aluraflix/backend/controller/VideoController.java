@@ -28,8 +28,13 @@ public class VideoController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VideoDTO> save(@RequestBody VideoDTO dto){
+    public ResponseEntity<VideoDTO> create(@RequestBody VideoDTO dto){
         return new ResponseEntity<>(service.create(dto),HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VideoDTO> update(@PathVariable("id") Long id,@RequestBody VideoDTO dto){
+        return new ResponseEntity<>(service.update(id,dto),HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

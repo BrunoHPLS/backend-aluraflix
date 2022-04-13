@@ -53,6 +53,18 @@ public class VideoService {
                         mapper.toEntity(dto)));
     }
 
+    public VideoDTO update(Long id, VideoDTO dto){
+        Video atualizado;
+        try{
+            atualizado = repository.findById(id).get();
+        }catch (NoSuchElementException ex){
+            throw new EntityNotFoundException(new Video(),id);
+        }
+        atualizado = mapper.toEntity(dto);
+
+        return mapper.toDTO(repository.save(atualizado));
+    }
+
     public void delete(Long id){
         try{
            repository.delete(repository.findById(id).get());
