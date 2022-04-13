@@ -9,12 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class VideoMapper {
 
+    private CategoriaMapper categoriaMapper;
+
     public Video toEntity(VideoDTO dto){
-        return new Video(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl());
+        return new Video(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), categoriaMapper.toEntity(dto.getCategoria()));
     }
 
     public VideoDTO toDTO(Video entity){
-        return new VideoDTO(entity.getId(),entity.getTitulo(),entity.getDescricao(),entity.getUrl());
+        return new VideoDTO(entity.getId(),entity.getTitulo(),entity.getDescricao(),entity.getUrl(),categoriaMapper.toDTO(entity.getCategoria()));
     }
 
     public Page<Video> toEntity(Page<VideoDTO> pageDTO){
