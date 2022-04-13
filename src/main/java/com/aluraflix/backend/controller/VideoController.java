@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequestMapping("/videos")
@@ -24,4 +21,11 @@ public class VideoController {
     public ResponseEntity<Page<VideoDTO>> get(){
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VideoDTO> get(@PathVariable(name = "id") Long id){
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
+
 }
