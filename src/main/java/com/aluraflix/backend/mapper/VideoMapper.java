@@ -1,7 +1,11 @@
 package com.aluraflix.backend.mapper;
 
-import com.aluraflix.backend.entity.DTO.VideoDTO;
+import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
+import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
+import com.aluraflix.backend.entity.DTO.VideoRequestDTO;
 import com.aluraflix.backend.entity.model.Video;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -9,21 +13,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class VideoMapper {
 
-    private CategoriaMapper categoriaMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public Video toEntity(VideoDTO dto){
-        return new Video(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), categoriaMapper.toEntity(dto.getCategoria()));
+    public Video toEntity(VideoResponseDTO dto){
+        return modelMapper.map(dto,Video.class);
     }
 
-    public VideoDTO toDTO(Video entity){
-        return new VideoDTO(entity.getId(),entity.getTitulo(),entity.getDescricao(),entity.getUrl(),categoriaMapper.toDTO(entity.getCategoria()));
+    public VideoResponseDTO toDTO(Video entity){
+        return modelMapper.map(entity, VideoResponseDTO.class);
     }
 
-    public Page<Video> toEntity(Page<VideoDTO> pageDTO){
+    public VideoResponseDTO toDTO(VideoRequestDTO videoRequestDTO, CategoriaResponseDTO categoriaResponseDTO){
+        return new VideoResponseDTO(
+                    videoRequestDTO.getId(),
+                    videoRequestDTO.getTitulo(),
+                    videoRequestDTO.getDescricao(),
+                    videoRequestDTO.getUrl(),
+                    categoriaResponseDTO);
+    }
+
+    public VideoRequestDTO toVideoRequestDTO(VideoResponseDTO dto){
+        return new VideoRequestDTO(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), dto.getCategoria().getId());
+    }
+
+    public Page<Video> toEntity(Page<VideoResponseDTO> pageDTO){
         return pageDTO.map(this::toEntity);
     }
 
-    public Page<VideoDTO> toDTO(Page<Video> page){
+    public Page<VideoResponseDTO> toDTO(Page<Video> page){
         return page.map(this::toDTO);
     }
 }

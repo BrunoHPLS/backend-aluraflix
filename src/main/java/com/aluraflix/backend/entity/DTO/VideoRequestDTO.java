@@ -9,9 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaDTO {
+public class VideoRequestDTO {
 
     private Long id;
     private String titulo;
-    private String cor;
+    private String descricao;
+    private String url;
+    private Long categoriaId;
 }

@@ -1,6 +1,8 @@
 package com.aluraflix.backend.service;
 
-import com.aluraflix.backend.entity.DTO.VideoDTO;
+import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
+import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
+import com.aluraflix.backend.entity.DTO.VideoRequestDTO;
 import com.aluraflix.backend.entity.model.Video;
 import com.aluraflix.backend.exceptions.EntityNotFoundException;
 import com.aluraflix.backend.exceptions.EntityNullException;
@@ -9,7 +11,6 @@ import com.aluraflix.backend.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +26,16 @@ public class VideoService {
     @Autowired
     private VideoMapper mapper;
 
-    public Page<VideoDTO> findAll(){
+    @Autowired
+    private CategoriaService categoriaService;
+
+    public Page<VideoResponseDTO> findAll(){
         return mapper.toDTO(
                 repository.findAll(
                         PageRequest.of(0,10,Sort.by(Sort.Order.asc("id")))));
     }
 
-    public VideoDTO findById(Long id){
+    public VideoResponseDTO findById(Long id){
         try{
             return mapper.toDTO(repository.findById(id).get());
         }catch(NoSuchElementException ex){
@@ -39,21 +43,25 @@ public class VideoService {
         }
     }
 
-    public VideoDTO create(VideoDTO dto){
+    public VideoResponseDTO create(VideoRequestDTO videoRequestDTO){
         try {
-            for (Field f : dto.getClass().getDeclaredFields()) {
+            for (Field f : videoRequestDTO.getClass().getDeclaredFields()) {
                 f.setAccessible(true);
-                if (f.get(dto) == null && !f.getName().equals("id")) {
-                    throw new EntityNullException(dto);
+                if (f.get(videoRequestDTO) == null && !f.getName().equals("id")) {
+                    throw new EntityNullException(videoRequestDTO);
                 }
             }
         }catch (IllegalAccessException ex){}
-        return mapper.toDTO(
-                repository.save(
-                        mapper.toEntity(dto)));
+
+            CategoriaResponseDTO cat = categoriaService.findById(videoRequestDTO.getCategoriaId());
+
+            return mapper.toDTO(
+                    repository.save(
+                            mapper.toEntity(
+                                    mapper.toDTO(videoRequestDTO,cat))));
     }
 
-    public VideoDTO update(Long id, VideoDTO dto){
+    public VideoResponseDTO update(Long id, VideoRequestDTO videoRequestDTO){
         Video atualizado;
         try{
             atualizado = repository.findById(id).get();
@@ -61,14 +69,17 @@ public class VideoService {
             throw new EntityNotFoundException(new Video(),id);
         }
         try {
-            for (Field f : dto.getClass().getDeclaredFields()) {
+            for (Field f : videoRequestDTO.getClass().getDeclaredFields()) {
                 f.setAccessible(true);
-                if (f.get(dto) == null) {
-                    throw new EntityNullException(dto);
+                if (f.get(videoRequestDTO) == null) {
+                    throw new EntityNullException(videoRequestDTO);
                 }
             }
         }catch (IllegalAccessException ex){}
-        atualizado = mapper.toEntity(dto);
+
+        CategoriaResponseDTO cat = categoriaService.findById(videoRequestDTO.getCategoriaId());
+
+        atualizado = mapper.toEntity(mapper.toDTO(videoRequestDTO,cat));
 
         return mapper.toDTO(repository.save(atualizado));
     }

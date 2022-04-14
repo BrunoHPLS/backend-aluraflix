@@ -1,6 +1,6 @@
 package com.aluraflix.backend.service;
 
-import com.aluraflix.backend.entity.DTO.CategoriaDTO;
+import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
 import com.aluraflix.backend.entity.model.Categoria;
 import com.aluraflix.backend.exceptions.EntityNotFoundException;
 import com.aluraflix.backend.exceptions.EntityNullException;
@@ -24,13 +24,13 @@ public class CategoriaService {
     @Autowired
     private CategoriaMapper mapper;
 
-    public Page<CategoriaDTO> findAll(){
+    public Page<CategoriaResponseDTO> findAll(){
         return mapper.toDTO(
                     repository.findAll(
                             PageRequest.of(0,10, Sort.by(Sort.Order.asc("id")))));
     }
 
-    public CategoriaDTO findById(Long id){
+    public CategoriaResponseDTO findById(Long id){
         try {
             return mapper.toDTO(repository.findById(id).get());
         }catch(NoSuchElementException ex){
@@ -38,7 +38,7 @@ public class CategoriaService {
         }
     }
 
-    public CategoriaDTO save(CategoriaDTO dto){
+    public CategoriaResponseDTO save(CategoriaResponseDTO dto){
         try {
             for (Field f : dto.getClass().getDeclaredFields()) {
                 f.setAccessible(true);
@@ -52,7 +52,7 @@ public class CategoriaService {
                         mapper.toEntity(dto)));
     }
 
-    public CategoriaDTO update(Long id,CategoriaDTO dto){
+    public CategoriaResponseDTO update(Long id, CategoriaResponseDTO dto){
         Categoria atualizada;
         try{
             atualizada = repository.findById(id).get();
