@@ -17,4 +17,7 @@ public interface VideoRepository extends PagingAndSortingRepository<Video,Long> 
 
     @Query("SELECT v FROM Video v WHERE v.id = :id")
     Optional<Video> findById(Long id);
+
+    @Query("SELECT v FROM Video v WHERE v.categoria.id = :id")
+    Page<Video> findByCategoria(Long id, Pageable pageable);
 }

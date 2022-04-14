@@ -3,6 +3,7 @@ package com.aluraflix.backend.service;
 import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoRequestDTO;
+import com.aluraflix.backend.entity.DTO.VideoWithoutCategoriasDTO;
 import com.aluraflix.backend.entity.model.Video;
 import com.aluraflix.backend.exceptions.EntityNotFoundException;
 import com.aluraflix.backend.exceptions.EntityNullException;
@@ -33,6 +34,11 @@ public class VideoService {
         return mapper.toDTO(
                 repository.findAll(
                         PageRequest.of(0,10,Sort.by(Sort.Order.asc("id")))));
+    }
+
+    public Page<VideoWithoutCategoriasDTO> getByCategorias(Long id) {
+        return mapper.toVideoWithoutCategoriasDTO(
+                repository.findByCategoria(id,PageRequest.of(0,10,Sort.by(Sort.Order.asc("id")))));
     }
 
     public VideoResponseDTO findById(Long id){

@@ -3,6 +3,7 @@ package com.aluraflix.backend.mapper;
 import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoRequestDTO;
+import com.aluraflix.backend.entity.DTO.VideoWithoutCategoriasDTO;
 import com.aluraflix.backend.entity.model.Video;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,10 @@ public class VideoMapper {
         return new VideoRequestDTO(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), dto.getCategoria().getId());
     }
 
+    public VideoWithoutCategoriasDTO toVideoWithoutCategoriasDTO(Video entity){
+        return modelMapper.map(entity, VideoWithoutCategoriasDTO.class);
+    }
+
     public Page<Video> toEntity(Page<VideoResponseDTO> pageDTO){
         return pageDTO.map(this::toEntity);
     }
@@ -44,4 +49,6 @@ public class VideoMapper {
     public Page<VideoResponseDTO> toDTO(Page<Video> page){
         return page.map(this::toDTO);
     }
+
+    public Page<VideoWithoutCategoriasDTO> toVideoWithoutCategoriasDTO(Page<Video> page){return page.map(this::toVideoWithoutCategoriasDTO);}
 }
