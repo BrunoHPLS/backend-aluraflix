@@ -30,9 +30,10 @@ public class VideoService {
     @Autowired
     private CategoriaService categoriaService;
 
-    public Page<VideoResponseDTO> findAll(){
+    public Page<VideoResponseDTO> findAll(String search){
         return mapper.toDTO(
                 repository.findAll(
+                        search,
                         PageRequest.of(0,10,Sort.by(Sort.Order.asc("id")))));
     }
 
