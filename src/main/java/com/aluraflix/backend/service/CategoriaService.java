@@ -24,10 +24,10 @@ public class CategoriaService {
     @Autowired
     private CategoriaMapper mapper;
 
-    public Page<CategoriaResponseDTO> findAll(){
+    public Page<CategoriaResponseDTO> findAll(Integer page){
         return mapper.toDTO(
                     repository.findAll(
-                            PageRequest.of(0,10, Sort.by(Sort.Order.asc("id")))));
+                            PageRequest.of(page <= 1 ? 0:page-1,10, Sort.by(Sort.Order.asc("id")))));
     }
 
     public CategoriaResponseDTO findById(Long id){

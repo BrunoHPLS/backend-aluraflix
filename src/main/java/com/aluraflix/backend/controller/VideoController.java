@@ -19,8 +19,8 @@ public class VideoController {
     private VideoService service;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<VideoResponseDTO>> getAll(@RequestParam(required = false) String search){
-        return new ResponseEntity<>(service.findAll(search), HttpStatus.OK);
+    public ResponseEntity<Page<VideoResponseDTO>> getAll(@RequestParam(required = false) Integer page,@RequestParam(required = false) String search){
+        return new ResponseEntity<>(service.findAll(page,search), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

@@ -30,16 +30,16 @@ public class VideoService {
     @Autowired
     private CategoriaService categoriaService;
 
-    public Page<VideoResponseDTO> findAll(String search){
+    public Page<VideoResponseDTO> findAll(Integer page,String search){
         return mapper.toDTO(
                 repository.findAll(
                         search,
-                        PageRequest.of(0,10,Sort.by(Sort.Order.asc("id")))));
+                        PageRequest.of(page <= 1 ? 0:page-1,5,Sort.by(Sort.Order.asc("id")))));
     }
 
-    public Page<VideoWithoutCategoriasDTO> getByCategorias(Long id) {
+    public Page<VideoWithoutCategoriasDTO> getByCategorias(Integer page,Long id) {
         return mapper.toVideoWithoutCategoriasDTO(
-                repository.findByCategoria(id,PageRequest.of(0,10,Sort.by(Sort.Order.asc("id")))));
+                repository.findByCategoria(id,PageRequest.of(page <= 1 ? 0:page-1,5,Sort.by(Sort.Order.asc("id")))));
     }
 
     public VideoResponseDTO findById(Long id){
