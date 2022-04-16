@@ -23,7 +23,7 @@ public class CategoriaController {
     private VideoService videoService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<CategoriaResponseDTO>> getAll(@RequestParam(required = false)Integer page){
+    public ResponseEntity<Page<CategoriaResponseDTO>> getAll(@RequestParam(defaultValue = "1")Integer page){
         return new ResponseEntity<>(service.findAll(page), HttpStatus.OK);
     }
 
@@ -33,7 +33,7 @@ public class CategoriaController {
     }
 
     @GetMapping(path = "/{id}/videos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<VideoWithoutCategoriasDTO>> getVideos(@RequestParam(required = false)Integer page,@PathVariable("id") Long id){
+    public ResponseEntity<Page<VideoWithoutCategoriasDTO>> getVideos(@RequestParam(defaultValue = "1")Integer page,@PathVariable("id") Long id){
         return new ResponseEntity<>(videoService.getByCategorias(page,id),HttpStatus.OK);
     }
 
