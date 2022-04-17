@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -21,6 +22,11 @@ public class VideoController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<VideoResponseDTO>> getAll(@RequestParam(defaultValue = "1") Integer page,@RequestParam(required = false) String search){
         return new ResponseEntity<>(service.findAll(page,search), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/free",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<VideoResponseDTO>> getAllFree(@RequestParam(defaultValue = "1") Integer page){
+        return new ResponseEntity<>(service.findAllFree(page),HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,6 +45,7 @@ public class VideoController {
     }
 
     @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADM')")
     public ResponseEntity delete(@PathVariable("id") Long id){
         service.delete(id);
         return new ResponseEntity(HttpStatus.OK);

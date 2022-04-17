@@ -16,4 +16,5 @@ public class VideoRequestDTO {
     private String descricao;
     private String url;
     private Long categoriaId;
+    private Boolean isfree;
 }

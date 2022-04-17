@@ -31,4 +31,7 @@ public class Video {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
+    @Column(name = "isfree", nullable = false)
+    private Boolean isfree;
 }

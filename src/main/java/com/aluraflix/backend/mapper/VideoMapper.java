@@ -31,11 +31,12 @@ public class VideoMapper {
                     videoRequestDTO.getTitulo(),
                     videoRequestDTO.getDescricao(),
                     videoRequestDTO.getUrl(),
-                    categoriaResponseDTO);
+                    categoriaResponseDTO,
+                    videoRequestDTO.getIsfree());
     }
 
     public VideoRequestDTO toVideoRequestDTO(VideoResponseDTO dto){
-        return new VideoRequestDTO(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), dto.getCategoria().getId());
+        return new VideoRequestDTO(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), dto.getCategoria().getId(),dto.getIsfree());
     }
 
     public VideoWithoutCategoriasDTO toVideoWithoutCategoriasDTO(Video entity){

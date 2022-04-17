@@ -16,4 +16,5 @@ public class VideoResponseDTO {
     private String descricao;
     private String url;
     private CategoriaResponseDTO categoria;
+    private Boolean isfree;
 }
