@@ -45,7 +45,6 @@ public class VideoController {
     }
 
     @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADM')")
     public ResponseEntity delete(@PathVariable("id") Long id){
         service.delete(id);
         return new ResponseEntity(HttpStatus.OK);
