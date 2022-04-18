@@ -1,8 +1,6 @@
 package com.aluraflix.backend.exceptions;
 
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 public class EntityNotFoundException extends ResponseStatusException {

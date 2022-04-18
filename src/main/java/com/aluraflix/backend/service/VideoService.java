@@ -1,9 +1,9 @@
 package com.aluraflix.backend.service;
 
-import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
-import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoRequestDTO;
+import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoWithoutCategoriasDTO;
+import com.aluraflix.backend.entity.model.Categoria;
 import com.aluraflix.backend.entity.model.Video;
 import com.aluraflix.backend.exceptions.EntityNotFoundException;
 import com.aluraflix.backend.exceptions.EntityNullException;
@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -31,6 +33,8 @@ public class VideoService {
     private CategoriaService categoriaService;
 
     public Page<VideoResponseDTO> findAll(Integer page,String search){
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("Logged in: "+user.getUsername());
         return mapper.toDTO(
                 repository.findAll(
                         search,
@@ -66,12 +70,11 @@ public class VideoService {
             }
         }catch (IllegalAccessException ex){}
 
-            CategoriaResponseDTO cat = categoriaService.findById(videoRequestDTO.getCategoriaId());
+            Categoria cat = categoriaService.findEntityById(videoRequestDTO.getCategoriaId());
 
             return mapper.toDTO(
                     repository.save(
-                            mapper.toEntity(
-                                    mapper.toDTO(videoRequestDTO,cat))));
+                            mapper.toEntity(videoRequestDTO,cat)));
     }
 
     public VideoResponseDTO update(Long id, VideoRequestDTO videoRequestDTO){
@@ -90,9 +93,9 @@ public class VideoService {
             }
         }catch (IllegalAccessException ex){}
 
-        CategoriaResponseDTO cat = categoriaService.findById(videoRequestDTO.getCategoriaId());
+        Categoria cat = categoriaService.findEntityById(videoRequestDTO.getCategoriaId());
 
-        atualizado = mapper.toEntity(mapper.toDTO(videoRequestDTO,cat));
+        atualizado = mapper.toEntity(videoRequestDTO,cat);
 
         return mapper.toDTO(repository.save(atualizado));
     }

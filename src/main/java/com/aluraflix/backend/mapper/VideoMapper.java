@@ -4,6 +4,7 @@ import com.aluraflix.backend.entity.DTO.CategoriaResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoResponseDTO;
 import com.aluraflix.backend.entity.DTO.VideoRequestDTO;
 import com.aluraflix.backend.entity.DTO.VideoWithoutCategoriasDTO;
+import com.aluraflix.backend.entity.model.Categoria;
 import com.aluraflix.backend.entity.model.Video;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,6 @@ public class VideoMapper {
 
     public VideoResponseDTO toDTO(VideoRequestDTO videoRequestDTO, CategoriaResponseDTO categoriaResponseDTO){
         return new VideoResponseDTO(
-                    videoRequestDTO.getId(),
                     videoRequestDTO.getTitulo(),
                     videoRequestDTO.getDescricao(),
                     videoRequestDTO.getUrl(),
@@ -35,8 +35,8 @@ public class VideoMapper {
                     videoRequestDTO.getIsfree());
     }
 
-    public VideoRequestDTO toVideoRequestDTO(VideoResponseDTO dto){
-        return new VideoRequestDTO(dto.getId(), dto.getTitulo(), dto.getDescricao(), dto.getUrl(), dto.getCategoria().getId(),dto.getIsfree());
+    public Video toEntity(VideoRequestDTO videoRequestDTO, Categoria cat){
+        return new Video(null,videoRequestDTO.getTitulo(),videoRequestDTO.getDescricao(), videoRequestDTO.getUrl(), cat,videoRequestDTO.getIsfree());
     }
 
     public VideoWithoutCategoriasDTO toVideoWithoutCategoriasDTO(Video entity){

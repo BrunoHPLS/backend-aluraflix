@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CategoriaResponseDTO {
 
-    private Long id;
     private String titulo;
     private String cor;
 }

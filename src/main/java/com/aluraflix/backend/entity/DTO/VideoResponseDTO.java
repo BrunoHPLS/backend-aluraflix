@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class VideoResponseDTO {
 
-    private Long id;
+
     private String titulo;
     private String descricao;
     private String url;

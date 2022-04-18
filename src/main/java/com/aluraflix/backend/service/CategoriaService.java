@@ -38,6 +38,14 @@ public class CategoriaService {
         }
     }
 
+    public Categoria findEntityById(Long id){
+        try {
+            return repository.findById(id).get();
+        }catch(NoSuchElementException ex){
+            throw new EntityNotFoundException(new Categoria(),id);
+        }
+    }
+
     public CategoriaResponseDTO save(CategoriaResponseDTO dto){
         try {
             for (Field f : dto.getClass().getDeclaredFields()) {
