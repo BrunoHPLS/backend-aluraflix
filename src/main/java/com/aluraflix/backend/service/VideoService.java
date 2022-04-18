@@ -33,17 +33,10 @@ public class VideoService {
     private CategoriaService categoriaService;
 
     public Page<VideoResponseDTO> findAll(Integer page,String search){
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("Logged in: "+user.getUsername());
         return mapper.toDTO(
                 repository.findAll(
+                        isLogged(),
                         search,
-                        PageRequest.of(page <= 1 ? 0:page-1,5,Sort.by(Sort.Order.asc("id")))));
-    }
-
-    public Page<VideoResponseDTO> findAllFree(Integer page){
-        return mapper.toDTO(
-                repository.findAllFree(
                         PageRequest.of(page <= 1 ? 0:page-1,5,Sort.by(Sort.Order.asc("id")))));
     }
 
@@ -54,7 +47,7 @@ public class VideoService {
 
     public VideoResponseDTO findById(Long id){
         try{
-            return mapper.toDTO(repository.findById(id).get());
+            return mapper.toDTO(repository.findById(isLogged(),id).get());
         }catch(NoSuchElementException ex){
             throw new EntityNotFoundException(new Video(),id);
         }
@@ -106,5 +99,9 @@ public class VideoService {
         }catch (NoSuchElementException ex){
             throw new EntityNotFoundException(new Video(),id);
         }
+    }
+
+    private Boolean isLogged(){
+        return !(SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser");
     }
 }

@@ -23,11 +23,6 @@ public class VideoController {
         return new ResponseEntity<>(service.findAll(page,search), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/free",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<VideoResponseDTO>> getAllFree(@RequestParam(defaultValue = "1") Integer page){
-        return new ResponseEntity<>(service.findAllFree(page),HttpStatus.OK);
-    }
-
     @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VideoResponseDTO> getOne(@PathVariable("id") Long id){
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
